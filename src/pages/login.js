@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import useLoginMutation from "../api/Auth/useLoginMutation";
@@ -18,19 +18,28 @@ const Login = () => {
     const navigate = useNavigate()
     const { onLogin, onUser, loggedIn } = useAuth();
     const {mutateAsync} = useLoginMutation();
+    const [messError, setMessError] = useState(null)
     const onSubmit = ({email, password}) => {
         return mutateAsync({
             email: email,
             password:password
         })
         .then((res) => {
-            onLogin(res.data.data.access_token);
-            onUser(res.data.user);
-            console.log("checking yah")
-            return navigate("/dashboard")
+            
+            if(res?.loggedIn !== false){
+                onLogin(res?.data?.data?.access_token);
+                onUser(res?.data?.user);
+                return navigate("/dashboard")
+            }else{
+                const messError = res?.axiosError?.response?.data?.message;
+                setMessError(messError)
+
+            }
+           
         })
-        .catch((error) => console.log(error, "check error"))
+        .catch((error) => console.log(error, "checking error login"))
     }
+    
     if(loggedIn){
         return <Navigate to="/dashboard" />
     }
@@ -38,7 +47,7 @@ const Login = () => {
         <>
             <Header />
             <div className="w-[50%] bg-white shadow-md rounded-lg mx-auto">
-                <div className="w-[80%] mx-auto mt-[10rem] pt-[5rem]">
+                <div className="w-[80%] mx-auto mt-[4rem] pt-[5rem]">
                     <h3 className="text-center font-bold text-5xl">Login</h3>
                     <div className="mt-[50px]">
                         <Formik
@@ -68,6 +77,9 @@ const Login = () => {
                                                     )
                                                 }} />
                                             </div>
+                                            {messError && (
+                                                <span className="text-red-500 text-center mt-[10px]">{messError}</span>
+                                            )}
                                             <div>
                                                 <button type="submit" className="bg-[#0B7FD0] py-[8px] px-[35px] rounded-[50px] outline-none w-full border-0 my-[50px] text-white font-bold">Submit</button>
                                 
