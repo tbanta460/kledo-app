@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import useLoginMutation from "../api/Auth/useLoginMutation";
 import { useAuth } from "../globalState/Auth";
 import { useNavigate, Navigate } from "react-router-dom";
+import Header from "../components/Header";
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Please input your email"),
     password: Yup.string().min(6, "Password too short").required("Please input your password")
@@ -35,6 +36,7 @@ const Login = () => {
     }
     return (
         <>
+            <Header />
             <div className="w-[50%] bg-white shadow-md rounded-lg mx-auto">
                 <div className="w-[80%] mx-auto mt-[10rem] pt-[5rem]">
                     <h3 className="text-center font-bold text-5xl">Login</h3>

@@ -4,13 +4,19 @@ import {
     RouterProvider,
   } from "react-router-dom";
 import Login from "../pages/login";
+import Profile from "../pages/profile";
 import Dashboard from "../pages/dashboard";
 import ShippingCompany from "../pages/sippingCompany";
+
 const Routers = () => {
     const router = createBrowserRouter([
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />
         },
         {
           path: "/dashboard",
